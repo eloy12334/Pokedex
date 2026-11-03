@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F5F9">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DETALLE DEL POKÉMON"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#252A34"
+            android:gravity="center"
+            android:layout_marginTop="15dp" />
+
+        <ImageView
+            android:id="@+id/imgDetalle"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:scaleType="fitCenter"
+            android:layout_marginTop="20dp"
+            android:contentDescription="Imagen del Pokémon" />
+
+        <TextView
+            android:id="@+id/tvDetalleNumero"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="#001"
+            android:textSize="16sp"
+            android:textColor="#9299A8"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDetalleNombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bulbasaur"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:textColor="#252A34"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/tvDetalleTipo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Planta / Veneno"
+            android:textSize="18sp"
+            android:textColor="#4B956D"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="12dp" />
+
+        <TextView
+            android:id="@+id/tvAltura"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Altura: --"
+            android:textSize="17sp"
+            android:textColor="#252A34"
+            android:gravity="center"
+            android:layout_marginTop="25dp" />
+
+        <TextView
+            android:id="@+id/tvPeso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Peso: --"
+            android:textSize="17sp"
+            android:textColor="#252A34"
+            android:gravity="center"
+            android:layout_marginTop="12dp" />
+
+    </LinearLayout>
+
+</ScrollView>

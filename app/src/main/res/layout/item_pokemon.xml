@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="190dp"
+    android:layout_margin="6dp"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/bg_pokemon_card"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/imgPokemon"
+        android:layout_width="115dp"
+        android:layout_height="115dp"
+        android:scaleType="fitCenter"
+        android:contentDescription="Imagen del Pokémon" />
+
+    <TextView
+        android:id="@+id/tvNumero"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="#001"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:textColor="#9299A8"
+        android:gravity="center"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/tvNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bulbasaur"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:textColor="#252A34"
+        android:gravity="center"
+        android:maxLines="1" />
+
+</LinearLayout>
