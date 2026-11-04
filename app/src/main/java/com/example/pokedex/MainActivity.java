@@ -1,3 +1,4 @@
+
 package com.example.pokedex;
 
 import android.content.Intent;
@@ -27,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pokedex.adapter.PokemonAdapter;
 import com.example.pokedex.api.ApiClient;
+import com.example.pokedex.database.DatabaseHelper;
 import com.example.pokedex.model.PokemonItem;
 import com.example.pokedex.model.PokemonListResponse;
 import com.example.pokedex.model.PokemonTypeResponse;
@@ -64,9 +66,14 @@ public class MainActivity extends AppCompatActivity {
     private Button btnCuadricula;
     private Button btnLista;
 
-    // ADAPTADOR
+    // ADAPTADOR Y BASE DE DATOS
 
     private PokemonAdapter adapter;
+    private DatabaseHelper databaseHelper;
+
+    // CONTROL DE FAVORITOS
+
+    private boolean mostrarSoloFavoritos = false;
 
     // LISTAS DE POKEMON
 
@@ -89,8 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean modoCuadricula = true;
 
-    // ORDEN DE TIPOS PARA MOSTRARLOS DE FORMA ESTABLE
-    // La API devuelve cada tipo por separado.
+    // ORDEN DE TIPOS
 
     private final String[] ordenTipos = {
             "normal", "fire", "water", "grass",
@@ -110,6 +116,9 @@ public class MainActivity extends AppCompatActivity {
 
         inicializarVistas();
 
+        // INICIALIZAR SQLITE ANTES DEL ADAPTADOR
+        databaseHelper = new DatabaseHelper(this);
+
         configurarRecyclerView();
 
         configurarOrdenamiento();
@@ -119,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
         configurarBusqueda();
 
         // CARGAR INFORMACION DE POKEAPI
-
         cargarPokemon();
 
         cargarTiposPokemon();
@@ -198,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new PokemonAdapter(
                 listaVisible,
+                databaseHelper,
                 pokemon -> {
 
                     Intent intent = new Intent(
@@ -211,6 +220,14 @@ public class MainActivity extends AppCompatActivity {
                     );
 
                     startActivity(intent);
+                },
+                () -> {
+                    // ACTUALIZAR SI ESTAMOS VIENDO FAVORITOS
+                    if (mostrarSoloFavoritos) {
+                        filtrarPokemon(
+                                edtBuscarPokemon.getText().toString()
+                        );
+                    }
                 }
         );
 
@@ -330,15 +347,23 @@ public class MainActivity extends AppCompatActivity {
                 this::mostrarMenuTipos
         );
 
-        // FAVORITOS
+        // MOSTRAR FAVORITOS
 
         btnFavoritos.setOnClickListener(v -> {
 
-            Toast.makeText(
-                    this,
-                    "Los favoritos se implementarán con SQLite",
-                    Toast.LENGTH_LONG
-            ).show();
+            mostrarSoloFavoritos = !mostrarSoloFavoritos;
+
+            if (mostrarSoloFavoritos) {
+                btnFavoritos.setText("★ Ver todos");
+            } else {
+                btnFavoritos.setText("★ Favoritos");
+            }
+
+            actualizarColorFiltros();
+
+            filtrarPokemon(
+                    edtBuscarPokemon.getText().toString()
+            );
         });
 
         // VISTA CUADRICULA
@@ -431,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
                                     response.body().getResults()
                             );
 
-                            // ASEGURAR PRIMERA GENERACION
+                            // SOLO PRIMERA GENERACION
 
                             if (listaCompleta.size() > 151) {
                                 listaCompleta.subList(
@@ -724,7 +749,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    // FILTRAR POR NOMBRE, NUMERO Y TIPO
+    // FILTRAR POR NOMBRE, NUMERO, TIPO Y FAVORITOS
 
     private void filtrarPokemon(String texto) {
 
@@ -732,12 +757,19 @@ public class MainActivity extends AppCompatActivity {
 
         String busqueda = texto.trim().toLowerCase(Locale.ROOT);
 
+        // OBTENER FAVORITOS DESDE SQLITE
+
+        List<Integer> favoritos =
+                databaseHelper.obtenerIdsFavoritos();
+
         for (PokemonItem pokemon : listaCompleta) {
+
+            int id = pokemon.getId();
 
             String nombre = pokemon.getName()
                     .toLowerCase(Locale.ROOT);
 
-            String numero = String.valueOf(pokemon.getId());
+            String numero = String.valueOf(id);
 
             boolean coincideBusqueda =
                     nombre.contains(busqueda)
@@ -745,11 +777,16 @@ public class MainActivity extends AppCompatActivity {
 
             boolean coincideTipo =
                     idsTipoSeleccionado == null
-                            || idsTipoSeleccionado.contains(
-                            pokemon.getId()
-                    );
+                            || idsTipoSeleccionado.contains(id);
 
-            if (coincideBusqueda && coincideTipo) {
+            boolean coincideFavorito =
+                    !mostrarSoloFavoritos
+                            || favoritos.contains(id);
+
+            if (coincideBusqueda
+                    && coincideTipo
+                    && coincideFavorito) {
+
                 listaVisible.add(pokemon);
             }
         }
@@ -839,6 +876,14 @@ public class MainActivity extends AppCompatActivity {
                                 : 0xFF252631
                 )
         );
+
+        btnFavoritos.setBackgroundTintList(
+                android.content.res.ColorStateList.valueOf(
+                        mostrarSoloFavoritos
+                                ? 0xFFE9273D
+                                : 0xFF252631
+                )
+        );
     }
 
     // ACTUALIZAR COLORES DE VISTA
@@ -871,5 +916,16 @@ public class MainActivity extends AppCompatActivity {
                 mensaje,
                 Toast.LENGTH_LONG
         ).show();
+    }
+
+    // CERRAR BASE DE DATOS
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (databaseHelper != null) {
+            databaseHelper.close();
+        }
     }
 }

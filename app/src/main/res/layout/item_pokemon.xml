@@ -1,77 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="225dp"
-    android:layout_margin="5dp"
+    android:layout_height="250dp"
     android:orientation="vertical"
-    android:gravity="center"
-    android:background="@drawable/bg_pokemon_card"
-    android:padding="9dp">
+    android:padding="12dp"
+    android:layout_margin="6dp"
+    android:background="@drawable/bg_pokemon_card">
 
-    <TextView
-        android:id="@+id/txtNumero"
+    <!-- NUMERO Y FAVORITO -->
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="#001"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:gravity="start"/>
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/txtNumero"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="#001"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtFavorito"
+            android:layout_width="38dp"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:text="☆"
+            android:textSize="27sp"
+            android:textColor="#FFFFFF"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Agregar a favoritos" />
+
+    </LinearLayout>
+
+    <!-- IMAGEN DEL POKEMON -->
 
     <ImageView
         android:id="@+id/imgPokemon"
         android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_height="105dp"
+        android:layout_marginTop="3dp"
         android:scaleType="fitCenter"
-        android:contentDescription="Imagen del Pokémon"/>
+        android:contentDescription="Imagen del Pokémon" />
+
+    <!-- NOMBRE -->
 
     <TextView
         android:id="@+id/txtNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="Bulbasaur"
+        android:textColor="#FFFFFF"
         android:textSize="17sp"
         android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:gravity="center"
-        android:maxLines="1"/>
+        android:layout_marginTop="3dp" />
 
     <!-- TIPOS DEL POKEMON -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="7dp">
+        android:layout_marginTop="8dp"
+        android:paddingBottom="5dp">
 
         <TextView
             android:id="@+id/txtTipo1"
             android:layout_width="wrap_content"
-            android:layout_height="27dp"
+            android:layout_height="30dp"
+            android:minWidth="70dp"
             android:gravity="center"
-            android:paddingLeft="9dp"
-            android:paddingRight="9dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             android:text="Planta"
             android:textColor="#FFFFFF"
-            android:textSize="10sp"
+            android:textSize="12sp"
             android:textStyle="bold"
-            android:background="#398B4D"
-            android:visibility="gone"/>
+            android:background="@drawable/bg_tipo" />
 
         <TextView
             android:id="@+id/txtTipo2"
             android:layout_width="wrap_content"
-            android:layout_height="27dp"
+            android:layout_height="30dp"
+            android:minWidth="70dp"
+            android:layout_marginStart="7dp"
             android:gravity="center"
-            android:paddingLeft="9dp"
-            android:paddingRight="9dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             android:text="Veneno"
             android:textColor="#FFFFFF"
-            android:textSize="10sp"
+            android:textSize="12sp"
             android:textStyle="bold"
-            android:background="#873DA5"
-            android:layout_marginStart="5dp"
-            android:visibility="gone"/>
+            android:background="@drawable/bg_tipo"
+            android:visibility="gone" />
 
     </LinearLayout>
 

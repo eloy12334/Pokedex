@@ -2,41 +2,64 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4F5F9">
+    android:background="#0B0C13"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center"
-        android:padding="20dp">
+        android:padding="18dp">
+
+        <!-- VOLVER A LA POKEDEX -->
+
+        <Button
+            android:id="@+id/btnVolverPokedex"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="← VOLVER A LA POKÉDEX"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:backgroundTint="#252631"
+            android:layout_marginBottom="20dp" />
+
+        <!-- TITULO -->
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="DETALLE DEL POKÉMON"
-            android:textSize="22sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#252A34"
+            android:textColor="#FFFFFF"
             android:gravity="center"
-            android:layout_marginTop="15dp" />
+            android:layout_marginBottom="12dp" />
+
+        <!-- IMAGEN -->
 
         <ImageView
             android:id="@+id/imgDetalle"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:layout_gravity="center"
             android:scaleType="fitCenter"
-            android:layout_marginTop="20dp"
             android:contentDescription="Imagen del Pokémon" />
+
+        <!-- NUMERO -->
 
         <TextView
             android:id="@+id/tvDetalleNumero"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="#001"
             android:textSize="16sp"
             android:textColor="#9299A8"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="8dp" />
+
+        <!-- NOMBRE -->
 
         <TextView
             android:id="@+id/tvDetalleNombre"
@@ -45,8 +68,11 @@
             android:text="Bulbasaur"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:textColor="#252A34"
-            android:gravity="center" />
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:layout_marginTop="5dp" />
+
+        <!-- TIPOS -->
 
         <TextView
             android:id="@+id/tvDetalleTipo"
@@ -54,30 +80,49 @@
             android:layout_height="wrap_content"
             android:text="Planta / Veneno"
             android:textSize="18sp"
-            android:textColor="#4B956D"
+            android:textColor="#43E0A0"
             android:textStyle="bold"
             android:gravity="center"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="10dp" />
 
-        <TextView
-            android:id="@+id/tvAltura"
+        <!-- INFORMACION GENERAL -->
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Altura: --"
-            android:textSize="17sp"
-            android:textColor="#252A34"
+            android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="25dp" />
+            android:layout_marginTop="25dp">
 
-        <TextView
-            android:id="@+id/tvPeso"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Peso: --"
-            android:textSize="17sp"
-            android:textColor="#252A34"
-            android:gravity="center"
-            android:layout_marginTop="12dp" />
+            <TextView
+                android:id="@+id/tvAltura"
+                android:layout_width="0dp"
+                android:layout_height="65dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Altura: --"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/bg_pokemon_card"
+                android:layout_marginEnd="5dp" />
+
+            <TextView
+                android:id="@+id/tvPeso"
+                android:layout_width="0dp"
+                android:layout_height="65dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Peso: --"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/bg_pokemon_card"
+                android:layout_marginStart="5dp" />
+
+        </LinearLayout>
+
+        <!-- TITULO ESTADISTICAS -->
 
         <TextView
             android:layout_width="match_parent"
@@ -85,16 +130,20 @@
             android:text="ESTADÍSTICAS BASE"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#252A34"
+            android:textColor="#FFFFFF"
             android:gravity="center"
             android:layout_marginTop="30dp"
-            android:layout_marginBottom="15dp" />
+            android:layout_marginBottom="12dp" />
+
+        <!-- LISTA DE ESTADISTICAS -->
 
         <LinearLayout
             android:id="@+id/layoutStats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:background="@drawable/bg_pokemon_card" />
 
     </LinearLayout>
 

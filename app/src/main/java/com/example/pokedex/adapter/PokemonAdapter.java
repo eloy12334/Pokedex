@@ -1,21 +1,21 @@
 package com.example.pokedex.adapter;
 
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.pokedex.R;
+import com.example.pokedex.database.DatabaseHelper;
 import com.example.pokedex.model.PokemonItem;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -23,29 +23,35 @@ import java.util.Map;
 
 public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder> {
 
-    private final List<PokemonItem> pokemonList;
-    private final OnPokemonClickListener listener;
-
-    private final Map<Integer, List<String>> tiposPokemon =
-            new HashMap<>();
-
     public interface OnPokemonClickListener {
         void onPokemonClick(PokemonItem pokemon);
     }
 
+    private final List<PokemonItem> pokemonList;
+    private final DatabaseHelper databaseHelper;
+    private final OnPokemonClickListener listener;
+    private final Runnable onFavoritesChanged;
+
+    private final Map<Integer, List<String>> tiposPokemon = new HashMap<>();
+
     public PokemonAdapter(
             List<PokemonItem> pokemonList,
-            OnPokemonClickListener listener) {
-
-        this.pokemonList = new ArrayList<>(pokemonList);
+            DatabaseHelper databaseHelper,
+            OnPokemonClickListener listener,
+            Runnable onFavoritesChanged
+    ) {
+        this.pokemonList = pokemonList;
+        this.databaseHelper = databaseHelper;
         this.listener = listener;
+        this.onFavoritesChanged = onFavoritesChanged;
     }
 
     @NonNull
     @Override
     public PokemonViewHolder onCreateViewHolder(
-            @NonNull ViewGroup parent, int viewType) {
-
+            @NonNull ViewGroup parent,
+            int viewType
+    ) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_pokemon, parent, false);
 
@@ -54,192 +60,200 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
 
     @Override
     public void onBindViewHolder(
-            @NonNull PokemonViewHolder holder, int position) {
-
+            @NonNull PokemonViewHolder holder,
+            int position
+    ) {
         PokemonItem pokemon = pokemonList.get(position);
 
         int id = pokemon.getId();
         String nombre = pokemon.getName();
 
-        holder.txtNombre.setText(
-                nombre.substring(0, 1).toUpperCase(Locale.ROOT)
-                        + nombre.substring(1)
-        );
-
         holder.txtNumero.setText(
                 String.format(Locale.ROOT, "#%03d", id)
         );
 
-        holder.txtNombre.setTextColor(Color.WHITE);
-        holder.txtNumero.setTextColor(0xFFE0E2EB);
-
-        // COLOR PRINCIPAL SEGUN EL PRIMER TIPO
-        List<String> tipos = tiposPokemon.get(id);
-
-        String tipoPrincipal =
-                (tipos != null && !tipos.isEmpty())
-                        ? tipos.get(0) : null;
-
-        int color = obtenerColor(tipoPrincipal);
-
-        GradientDrawable fondo = new GradientDrawable();
-        fondo.setColor(color);
-        fondo.setCornerRadius(dp(holder.itemView, 18));
-        fondo.setStroke(
-                dp(holder.itemView, 1),
-                aclararColor(color)
+        holder.txtNombre.setText(
+                capitalizar(nombre)
         );
 
-        holder.itemView.setBackground(fondo);
-
-        // MOSTRAR LOS TIPOS
-        mostrarTipos(holder, tipos);
-
-        // IMAGEN OFICIAL
-        String imageUrl =
+        String imagenUrl =
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/"
                         + id + ".png";
 
-        Glide.with(holder.imgPokemon.getContext())
-                .load(imageUrl)
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)
+        Glide.with(holder.itemView.getContext())
+                .load(imagenUrl)
+                .placeholder(android.R.drawable.ic_menu_gallery)
+                .error(android.R.drawable.ic_menu_report_image)
                 .into(holder.imgPokemon);
 
+        // MOSTRAR TIPOS
+
+        List<String> tipos = tiposPokemon.get(id);
+
+        if (tipos != null && !tipos.isEmpty()) {
+
+            holder.txtTipo1.setText(capitalizar(tipos.get(0)));
+            holder.txtTipo1.setVisibility(View.VISIBLE);
+
+            holder.txtTipo1.setBackgroundTintList(
+                    android.content.res.ColorStateList.valueOf(
+                            colorTipo(tipos.get(0))
+                    )
+            );
+
+            if (tipos.size() > 1) {
+
+                holder.txtTipo2.setText(capitalizar(tipos.get(1)));
+                holder.txtTipo2.setVisibility(View.VISIBLE);
+
+                holder.txtTipo2.setBackgroundTintList(
+                        android.content.res.ColorStateList.valueOf(
+                                colorTipo(tipos.get(1))
+                        )
+                );
+
+            } else {
+                holder.txtTipo2.setVisibility(View.GONE);
+            }
+
+        } else {
+            holder.txtTipo1.setVisibility(View.GONE);
+            holder.txtTipo2.setVisibility(View.GONE);
+        }
+
+        // ACTUALIZAR ESTRELLA
+
+        actualizarEstrella(holder, id);
+
+        // AGREGAR O QUITAR FAVORITO
+
+        holder.txtFavorito.setOnClickListener(v -> {
+
+            boolean esFavorito = databaseHelper.esFavorito(id);
+
+            if (esFavorito) {
+
+                databaseHelper.eliminarFavorito(id);
+
+                Toast.makeText(
+                        holder.itemView.getContext(),
+                        nombre + " eliminado de favoritos",
+                        Toast.LENGTH_SHORT
+                ).show();
+
+            } else {
+
+                databaseHelper.agregarFavorito(
+                        id,
+                        nombre,
+                        imagenUrl
+                );
+
+                Toast.makeText(
+                        holder.itemView.getContext(),
+                        nombre + " agregado a favoritos",
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+
+            actualizarEstrella(holder, id);
+
+            if (onFavoritesChanged != null) {
+                onFavoritesChanged.run();
+            }
+        });
+
+        // ABRIR DETALLE
+
         holder.itemView.setOnClickListener(v -> {
+
             if (listener != null) {
                 listener.onPokemonClick(pokemon);
             }
         });
     }
 
-    private void mostrarTipos(
+    // ACTUALIZAR ESTRELLA
+
+    private void actualizarEstrella(
             PokemonViewHolder holder,
-            List<String> tipos) {
+            int id
+    ) {
 
-        holder.txtTipo1.setVisibility(View.GONE);
-        holder.txtTipo2.setVisibility(View.GONE);
+        boolean favorito = databaseHelper.esFavorito(id);
 
-        if (tipos == null || tipos.isEmpty()) {
-            return;
-        }
+        if (favorito) {
 
-        // PRIMER TIPO
-        String tipo1 = tipos.get(0);
+            holder.txtFavorito.setText("★");
+            holder.txtFavorito.setTextColor(Color.YELLOW);
+            holder.txtFavorito.setContentDescription(
+                    "Quitar de favoritos"
+            );
 
-        holder.txtTipo1.setText(traducirTipo(tipo1));
-        holder.txtTipo1.setBackground(crearFondoTipo(tipo1));
-        holder.txtTipo1.setVisibility(View.VISIBLE);
+        } else {
 
-        // SEGUNDO TIPO
-        if (tipos.size() >= 2) {
-
-            String tipo2 = tipos.get(1);
-
-            holder.txtTipo2.setText(traducirTipo(tipo2));
-            holder.txtTipo2.setBackground(crearFondoTipo(tipo2));
-            holder.txtTipo2.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void actualizarLista(List<PokemonItem> nuevaLista) {
-        pokemonList.clear();
-        pokemonList.addAll(nuevaLista);
-        notifyDataSetChanged();
-    }
-
-    public void actualizarTipos(
-            Map<Integer, List<String>> nuevosTipos) {
-
-        tiposPokemon.clear();
-
-        for (Map.Entry<Integer, List<String>> entry
-                : nuevosTipos.entrySet()) {
-
-            tiposPokemon.put(
-                    entry.getKey(),
-                    new ArrayList<>(entry.getValue())
+            holder.txtFavorito.setText("☆");
+            holder.txtFavorito.setTextColor(Color.WHITE);
+            holder.txtFavorito.setContentDescription(
+                    "Agregar a favoritos"
             );
         }
+    }
+
+    // ACTUALIZAR LISTA
+
+    public void actualizarLista(List<PokemonItem> nuevaLista) {
+        // La lista es compartida con MainActivity.
+        notifyDataSetChanged();
+    }
+
+    // ACTUALIZAR TIPOS
+
+    public void actualizarTipos(Map<Integer, List<String>> nuevosTipos) {
+
+        tiposPokemon.clear();
+        tiposPokemon.putAll(nuevosTipos);
 
         notifyDataSetChanged();
     }
 
-    private GradientDrawable crearFondoTipo(String tipo) {
+    // CAPITALIZAR NOMBRE
 
-        GradientDrawable fondo = new GradientDrawable();
+    private String capitalizar(String texto) {
 
-        fondo.setColor(obtenerColor(tipo));
-        fondo.setCornerRadius(dp(null, 15));
-
-        return fondo;
-    }
-
-    private int obtenerColor(String tipo) {
-
-        if (tipo == null) {
-            return Color.rgb(38, 40, 55);
+        if (texto == null || texto.isEmpty()) {
+            return "";
         }
 
-        switch (tipo) {
-            case "grass": return Color.rgb(25, 91, 55);
-            case "fire": return Color.rgb(126, 48, 34);
-            case "water": return Color.rgb(28, 78, 119);
-            case "electric": return Color.rgb(111, 91, 25);
-            case "bug": return Color.rgb(83, 101, 28);
-            case "poison": return Color.rgb(94, 48, 112);
-            case "normal": return Color.rgb(91, 84, 78);
-            case "flying": return Color.rgb(67, 72, 125);
-            case "ground": return Color.rgb(112, 78, 42);
-            case "fairy": return Color.rgb(130, 65, 94);
-            case "fighting": return Color.rgb(126, 47, 44);
-            case "psychic": return Color.rgb(125, 43, 83);
-            case "rock": return Color.rgb(105, 91, 51);
-            case "ghost": return Color.rgb(66, 58, 112);
-            case "ice": return Color.rgb(35, 102, 112);
-            case "dragon": return Color.rgb(67, 49, 130);
-            default: return Color.rgb(38, 40, 55);
-        }
+        return texto.substring(0, 1).toUpperCase(Locale.ROOT)
+                + texto.substring(1);
     }
 
-    private int aclararColor(int color) {
+    // COLORES DE TIPOS
 
-        int rojo = Math.min(255, Color.red(color) + 65);
-        int verde = Math.min(255, Color.green(color) + 65);
-        int azul = Math.min(255, Color.blue(color) + 65);
+    private int colorTipo(String tipo) {
 
-        return Color.rgb(rojo, verde, azul);
-    }
+        switch (tipo.toLowerCase(Locale.ROOT)) {
 
-    private int dp(View view, int valor) {
+            case "fire": return Color.rgb(238, 129, 48);
+            case "water": return Color.rgb(99, 144, 240);
+            case "grass": return Color.rgb(122, 199, 76);
+            case "electric": return Color.rgb(247, 208, 44);
+            case "ice": return Color.rgb(150, 217, 214);
+            case "fighting": return Color.rgb(194, 46, 40);
+            case "poison": return Color.rgb(163, 62, 161);
+            case "ground": return Color.rgb(226, 191, 101);
+            case "flying": return Color.rgb(169, 143, 243);
+            case "psychic": return Color.rgb(249, 85, 135);
+            case "bug": return Color.rgb(166, 185, 26);
+            case "rock": return Color.rgb(182, 161, 54);
+            case "ghost": return Color.rgb(115, 87, 151);
+            case "dragon": return Color.rgb(111, 53, 252);
+            case "dark": return Color.rgb(112, 87, 70);
+            case "steel": return Color.rgb(183, 183, 206);
+            case "fairy": return Color.rgb(214, 133, 173);
 
-        float densidad = view != null
-                ? view.getResources().getDisplayMetrics().density
-                : 1f;
-
-        return (int) (valor * densidad);
-    }
-
-    private String traducirTipo(String tipo) {
-
-        switch (tipo) {
-            case "grass": return "🌿 Planta";
-            case "fire": return "🔥 Fuego";
-            case "water": return "💧 Agua";
-            case "electric": return "⚡ Eléctrico";
-            case "bug": return "🐛 Bicho";
-            case "poison": return "☠ Veneno";
-            case "normal": return "Normal";
-            case "flying": return "🪽 Volador";
-            case "ground": return "Tierra";
-            case "fairy": return "Hada";
-            case "fighting": return "Lucha";
-            case "psychic": return "🔮 Psíquico";
-            case "rock": return "Roca";
-            case "ghost": return "👻 Fantasma";
-            case "ice": return "❄ Hielo";
-            case "dragon": return "🐉 Dragón";
-            default: return tipo;
+            default: return Color.GRAY;
         }
     }
 
@@ -248,25 +262,28 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
         return pokemonList.size();
     }
 
-    public static class PokemonViewHolder
-            extends RecyclerView.ViewHolder {
+    // VISTA DE CADA POKEMON
 
-        ImageView imgPokemon;
+    static class PokemonViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtNumero;
         TextView txtNombre;
         TextView txtTipo1;
         TextView txtTipo2;
+        TextView txtFavorito;
+
+        ImageView imgPokemon;
 
         public PokemonViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            imgPokemon = itemView.findViewById(R.id.imgPokemon);
 
             txtNumero = itemView.findViewById(R.id.txtNumero);
             txtNombre = itemView.findViewById(R.id.txtNombre);
             txtTipo1 = itemView.findViewById(R.id.txtTipo1);
             txtTipo2 = itemView.findViewById(R.id.txtTipo2);
+            txtFavorito = itemView.findViewById(R.id.txtFavorito);
+
+            imgPokemon = itemView.findViewById(R.id.imgPokemon);
         }
     }
 }
