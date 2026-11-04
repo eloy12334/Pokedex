@@ -23,8 +23,8 @@
 
         <ImageView
             android:id="@+id/imgDetalle"
-            android:layout_width="240dp"
-            android:layout_height="240dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:scaleType="fitCenter"
             android:layout_marginTop="20dp"
             android:contentDescription="Imagen del Pokémon" />
@@ -78,6 +78,23 @@
             android:textColor="#252A34"
             android:gravity="center"
             android:layout_marginTop="12dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ESTADÍSTICAS BASE"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#252A34"
+            android:gravity="center"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="15dp" />
+
+        <LinearLayout
+            android:id="@+id/layoutStats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
 
     </LinearLayout>
 

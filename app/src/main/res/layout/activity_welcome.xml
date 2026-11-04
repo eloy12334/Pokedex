@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0B0C13"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:id="@+id/lytWelcome"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="KANTO  ·  GENERACIÓN I"
+            android:textColor="#FF4658"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:letterSpacing="0.15"
+            android:layout_marginBottom="14dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="POKÉDEX"
+            android:textColor="#FFFFFF"
+            android:textSize="42sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.04"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Los 151 Pokémon originales"
+            android:textColor="#B8BAC8"
+            android:textSize="15sp"
+            android:layout_marginTop="8dp"/>
+
+        <ImageView
+            android:id="@+id/imgPokeball"
+            android:layout_width="105dp"
+            android:layout_height="105dp"
+            android:src="@mipmap/ic_launcher"
+            android:scaleType="fitCenter"
+            android:contentDescription="Logo de Pokédex"
+            android:layout_marginTop="24dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:id="@+id/imgBulbasaur"
+                android:layout_width="0dp"
+                android:layout_height="145dp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:contentDescription="Bulbasaur"/>
+
+            <ImageView
+                android:id="@+id/imgCharmander"
+                android:layout_width="0dp"
+                android:layout_height="145dp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:contentDescription="Charmander"/>
+
+            <ImageView
+                android:id="@+id/imgSquirtle"
+                android:layout_width="0dp"
+                android:layout_height="145dp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:contentDescription="Squirtle"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EXPLORA · DESCUBRE · COLECCIONA"
+            android:textColor="#D4D5DF"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hecha por Eloy Sandoval"
+            android:textColor="#9699A9"
+            android:textSize="14sp"
+            android:layout_marginTop="12dp"/>
+
+        <Button
+            android:id="@+id/btnEntrarPokedex"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:text="ENTRAR A LA POKÉDEX"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:backgroundTint="#E9273D"
+            android:layout_marginTop="30dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="POKÉDEX KANTO · N.º 001–151"
+            android:textColor="#777989"
+            android:textSize="11sp"
+            android:layout_marginTop="20dp"/>
+
+    </LinearLayout>
+
+</ScrollView>

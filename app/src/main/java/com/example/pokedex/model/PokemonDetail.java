@@ -1,3 +1,4 @@
+
 package com.example.pokedex.model;
 
 import java.util.List;
@@ -10,6 +11,7 @@ public class PokemonDetail {
     private int weight;
     private Sprites sprites;
     private List<TypeSlot> types;
+    private List<StatSlot> stats;
 
     public int getId() {
         return id;
@@ -35,6 +37,10 @@ public class PokemonDetail {
         return types;
     }
 
+    public List<StatSlot> getStats() {
+        return stats;
+    }
+
     public static class Sprites {
         private String front_default;
 
@@ -52,6 +58,27 @@ public class PokemonDetail {
     }
 
     public static class TypeInfo {
+        private String name;
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    public static class StatSlot {
+        private int base_stat;
+        private StatInfo stat;
+
+        public int getBaseStat() {
+            return base_stat;
+        }
+
+        public StatInfo getStat() {
+            return stat;
+        }
+    }
+
+    public static class StatInfo {
         private String name;
 
         public String getName() {
