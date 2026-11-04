@@ -1,40 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="190dp"
-    android:layout_margin="6dp"
+    android:layout_height="225dp"
+    android:layout_margin="5dp"
     android:orientation="vertical"
     android:gravity="center"
     android:background="@drawable/bg_pokemon_card"
-    android:padding="10dp">
-
-    <ImageView
-        android:id="@+id/imgPokemon"
-        android:layout_width="115dp"
-        android:layout_height="115dp"
-        android:scaleType="fitCenter"
-        android:contentDescription="Imagen del Pokémon" />
+    android:padding="9dp">
 
     <TextView
-        android:id="@+id/tvNumero"
+        android:id="@+id/txtNumero"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="#001"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:textStyle="bold"
-        android:textColor="#9299A8"
-        android:gravity="center"
-        android:layout_marginTop="4dp" />
+        android:textColor="#FFFFFF"
+        android:gravity="start"/>
+
+    <ImageView
+        android:id="@+id/imgPokemon"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:scaleType="fitCenter"
+        android:contentDescription="Imagen del Pokémon"/>
 
     <TextView
-        android:id="@+id/tvNombre"
+        android:id="@+id/txtNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Bulbasaur"
         android:textSize="17sp"
         android:textStyle="bold"
-        android:textColor="#252A34"
+        android:textColor="#FFFFFF"
         android:gravity="center"
-        android:maxLines="1" />
+        android:maxLines="1"/>
+
+    <!-- TIPOS DEL POKEMON -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="7dp">
+
+        <TextView
+            android:id="@+id/txtTipo1"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:gravity="center"
+            android:paddingLeft="9dp"
+            android:paddingRight="9dp"
+            android:text="Planta"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:background="#398B4D"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/txtTipo2"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:gravity="center"
+            android:paddingLeft="9dp"
+            android:paddingRight="9dp"
+            android:text="Veneno"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:background="#873DA5"
+            android:layout_marginStart="5dp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
 
 </LinearLayout>

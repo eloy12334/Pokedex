@@ -4,54 +4,189 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F4F5F9"
-    android:padding="16dp">
+    android:background="#0B0C13"
+    android:padding="14dp">
 
-    <TextView
+    <!-- ENCABEZADO -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="POKÉDEX"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:textColor="#252A34"
-        android:gravity="center"
-        android:layout_marginTop="12dp" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="12dp">
 
-    <TextView
+        <ImageView
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:src="@drawable/pokedex_logo"
+            android:scaleType="centerCrop"
+            android:contentDescription="Logo Pokédex"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="POKÉDEX"
+                android:textColor="#FFFFFF"
+                android:textSize="23sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="KANTO · GENERACIÓN I"
+                android:textColor="#FF4658"
+                android:textSize="11sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtTotalPokemon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="151 Pokémon"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:background="#252631"
+            android:padding="9dp"/>
+    </LinearLayout>
+
+    <!-- BOTÓN VOLVER -->
+    <Button
+        android:id="@+id/btnVolverInicio"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:text="← VOLVER AL INICIO"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:backgroundTint="#252631"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- FILTROS -->
+    <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PRIMERA GENERACIÓN · KANTO"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        android:textColor="#777F91"
-        android:gravity="center"
-        android:layout_marginBottom="20dp" />
+        android:scrollbars="none"
+        android:layout_marginBottom="12dp">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnTodos"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:text="Todos (151)"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:backgroundTint="#E9273D"/>
+
+            <Button
+                android:id="@+id/btnPorTipo"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:text="Por tipo"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:backgroundTint="#252631"
+                android:layout_marginStart="7dp"/>
+
+            <Button
+                android:id="@+id/btnFavoritos"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:text="★ Favoritos"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:backgroundTint="#252631"
+                android:layout_marginStart="7dp"/>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- BUSCADOR -->
     <EditText
-        android:id="@+id/etBuscar"
+        android:id="@+id/edtBuscarPokemon"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:hint="Buscar Pokémon por nombre o número"
+        android:hint="Buscar Pokémon por nombre o número..."
         android:singleLine="true"
         android:inputType="text"
-        android:padding="12dp"
-        android:textColor="#252A34"
-        android:background="#FFFFFF"
-        android:layout_marginBottom="16dp" />
+        android:textColor="#FFFFFF"
+        android:textColorHint="#A0A1AD"
+        android:padding="13dp"
+        android:background="#252631"
+        android:layout_marginBottom="12dp"/>
 
+    <!-- ORDEN Y VISTA -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
+
+        <Spinner
+            android:id="@+id/spnOrden"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:backgroundTint="#FF4658"/>
+
+        <Button
+            android:id="@+id/btnCuadricula"
+            android:layout_width="48dp"
+            android:layout_height="43dp"
+            android:text="▦"
+            android:textSize="21sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#E9273D"
+            android:layout_marginStart="7dp"/>
+
+        <Button
+            android:id="@+id/btnLista"
+            android:layout_width="48dp"
+            android:layout_height="43dp"
+            android:text="☷"
+            android:textSize="21sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#252631"
+            android:layout_marginStart="5dp"/>
+    </LinearLayout>
+
+    <!-- CONTADOR -->
+    <TextView
+        android:id="@+id/txtResultados"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mostrando 151 Pokémon"
+        android:textColor="#A0A1AD"
+        android:textSize="12sp"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- CARGA -->
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_gravity="center"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
+    <!-- LISTA -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPokemon"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:clipToPadding="false"
-        android:paddingBottom="12dp" />
+        android:paddingBottom="12dp"/>
 
 </LinearLayout>
