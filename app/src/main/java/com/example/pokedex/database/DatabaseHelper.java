@@ -12,7 +12,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "pokedex.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String TABLE_FAVORITOS = "favoritos";
     private static final String COLUMN_ID = "id";
@@ -30,11 +30,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_NOMBRE + " TEXT NOT NULL, " +
                 COLUMN_IMAGEN + " TEXT)";
         db.execSQL(crearTabla);
+
+        String crearTablaEquipo = "CREATE TABLE equipos (" +
+                "slot INTEGER PRIMARY KEY, " +
+                "pokemon_id INTEGER NOT NULL, " +
+                "nombre TEXT NOT NULL)";
+        db.execSQL(crearTablaEquipo);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // En esta versión no se eliminan los datos existentes.
+        if (oldVersion < 2) {
+            db.execSQL("CREATE TABLE IF NOT EXISTS equipos (" +
+                    "slot INTEGER PRIMARY KEY, " +
+                    "pokemon_id INTEGER NOT NULL, " +
+                    "nombre TEXT NOT NULL)");
+        }
+    }
+
+    public boolean guardarPokemonEquipo(int slot, int pokemonId, String nombre) {
+        if (slot < 1 || slot > 6 || pokemonId < 1 || pokemonId > 151) {
+            return false;
+        }
+
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("slot", slot);
+        values.put("pokemon_id", pokemonId);
+        values.put("nombre", nombre);
+
+        return db.insertWithOnConflict(
+                "equipos", null, values, SQLiteDatabase.CONFLICT_REPLACE
+        ) != -1;
+    }
+
+    public boolean eliminarPokemonEquipo(int slot) {
+        SQLiteDatabase db = getWritableDatabase();
+        return db.delete("equipos", "slot=?",
+                new String[]{String.valueOf(slot)}) > 0;
+    }
+
+    public Cursor obtenerEquipo() {
+        SQLiteDatabase db = getReadableDatabase();
+        return db.query("equipos",
+                new String[]{"slot", "pokemon_id", "nombre"},
+                null, null, null, null, "slot ASC");
     }
 
     public boolean agregarFavorito(int id, String nombre, String imagen) {

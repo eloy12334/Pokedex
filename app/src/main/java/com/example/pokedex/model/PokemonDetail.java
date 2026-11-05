@@ -9,9 +9,12 @@ public class PokemonDetail {
     private String name;
     private int height;
     private int weight;
+
     private Sprites sprites;
     private List<TypeSlot> types;
     private List<StatSlot> stats;
+    private List<AbilitySlot> abilities;
+    private List<MoveSlot> moves;
 
     public int getId() {
         return id;
@@ -41,7 +44,18 @@ public class PokemonDetail {
         return stats;
     }
 
+    public List<AbilitySlot> getAbilities() {
+        return abilities;
+    }
+
+    public List<MoveSlot> getMoves() {
+        return moves;
+    }
+
+    // IMAGENES
+
     public static class Sprites {
+
         private String front_default;
 
         public String getFront_default() {
@@ -49,7 +63,10 @@ public class PokemonDetail {
         }
     }
 
+    // TIPOS
+
     public static class TypeSlot {
+
         private TypeInfo type;
 
         public TypeInfo getType() {
@@ -58,6 +75,7 @@ public class PokemonDetail {
     }
 
     public static class TypeInfo {
+
         private String name;
 
         public String getName() {
@@ -65,7 +83,10 @@ public class PokemonDetail {
         }
     }
 
+    // ESTADISTICAS
+
     public static class StatSlot {
+
         private int base_stat;
         private StatInfo stat;
 
@@ -79,10 +100,61 @@ public class PokemonDetail {
     }
 
     public static class StatInfo {
+
         private String name;
 
         public String getName() {
             return name;
+        }
+    }
+
+    // HABILIDADES
+
+    public static class AbilitySlot {
+
+        private AbilityInfo ability;
+        private boolean is_hidden;
+
+        public AbilityInfo getAbility() {
+            return ability;
+        }
+
+        public boolean isHidden() {
+            return is_hidden;
+        }
+    }
+
+    public static class AbilityInfo {
+
+        private String name;
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    // MOVIMIENTOS
+
+    public static class MoveSlot {
+
+        private MoveInfo move;
+
+        public MoveInfo getMove() {
+            return move;
+        }
+    }
+
+    public static class MoveInfo {
+
+        private String name;
+        private String url;
+
+        public String getName() {
+            return name;
+        }
+
+        public String getUrl() {
+            return url;
         }
     }
 }

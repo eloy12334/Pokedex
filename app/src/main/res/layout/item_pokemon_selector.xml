@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:gravity="center" android:padding="8dp"
+    android:layout_margin="4dp" android:background="@drawable/bg_selector_pokemon"
+    android:clickable="true" android:focusable="true">
+    <ImageView android:id="@+id/imgPokemonSelector" android:layout_width="match_parent"
+        android:layout_height="104dp" android:scaleType="fitCenter" android:contentDescription="Imagen del Pokémon"/>
+    <TextView android:id="@+id/txtNumeroSelector" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:text="#001" android:textColor="#43E0A0"
+        android:textSize="10sp" android:textStyle="bold" android:gravity="center" android:layout_marginTop="2dp"/>
+    <TextView android:id="@+id/txtNombreSelector" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:text="Bulbasaur" android:textColor="#FFFFFF"
+        android:textSize="13sp" android:textStyle="bold" android:gravity="center"
+        android:singleLine="true" android:ellipsize="end" android:layout_marginTop="3dp"/>
+</LinearLayout>

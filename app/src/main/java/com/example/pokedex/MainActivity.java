@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btnFavoritos;
     private Button btnCuadricula;
     private Button btnLista;
+    private Button btnEquipo;
+    private Button btnEfectividad;
 
     // ADAPTADOR Y BASE DE DATOS
 
@@ -194,6 +196,9 @@ public class MainActivity extends AppCompatActivity {
 
         btnLista =
                 findViewById(R.id.btnLista);
+
+        btnEquipo = findViewById(R.id.btnEquipo);
+        btnEfectividad = findViewById(R.id.btnEfectividad);
     }
 
     // CONFIGURAR RECYCLERVIEW
@@ -327,6 +332,14 @@ public class MainActivity extends AppCompatActivity {
         // REGRESAR A BIENVENIDA
 
         btnVolverInicio.setOnClickListener(v -> finish());
+
+        // HERRAMIENTAS DE LA POKEDEX
+
+        btnEquipo.setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, TeamActivity.class)));
+
+        btnEfectividad.setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, TypeMatchupActivity.class)));
 
         // MOSTRAR TODOS
 

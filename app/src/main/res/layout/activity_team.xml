@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#0B0C13" android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="16dp">
+        <Button android:id="@+id/btnVolverEquipo" android:layout_width="match_parent"
+            android:layout_height="46dp" android:text="← VOLVER A LA POKÉDEX"
+            android:textColor="#FFFFFF" android:textStyle="bold" android:backgroundTint="#252631"/>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="MI EQUIPO" android:textColor="#FFFFFF" android:textSize="27sp"
+            android:textStyle="bold" android:gravity="center" android:layout_marginTop="24dp"/>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Arma tu equipo ideal de Kanto" android:textColor="#A0A1AD"
+            android:textSize="13sp" android:gravity="center" android:layout_marginTop="6dp"
+            android:layout_marginBottom="20dp"/>
+        <LinearLayout android:id="@+id/layoutEquipo" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="vertical"
+            android:padding="12dp" android:background="@drawable/bg_pokemon_card"/>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Selecciona un espacio para agregar o cambiar un Pokémon. Mantén tu equipo a tu gusto."
+            android:textColor="#777D8E" android:textSize="11sp" android:gravity="center"
+            android:layout_marginTop="14dp" android:layout_marginBottom="18dp"/>
+    </LinearLayout>
+</ScrollView>

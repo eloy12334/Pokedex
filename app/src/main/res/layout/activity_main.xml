@@ -69,6 +69,38 @@
         android:backgroundTint="#252631"
         android:layout_marginBottom="12dp"/>
 
+    <!-- HERRAMIENTAS -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp">
+
+        <Button
+            android:id="@+id/btnEquipo"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:text="⚔ Mi equipo"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:backgroundTint="#267B62"
+            android:layout_marginEnd="5dp"/>
+
+        <Button
+            android:id="@+id/btnEfectividad"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:text="◎ Tipos"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:backgroundTint="#34384B"
+            android:layout_marginStart="5dp"/>
+    </LinearLayout>
+
     <!-- FILTROS -->
     <HorizontalScrollView
         android:layout_width="match_parent"

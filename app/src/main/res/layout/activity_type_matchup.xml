@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#0B0C13" android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="16dp">
+        <Button android:id="@+id/btnVolverTipos" android:layout_width="match_parent"
+            android:layout_height="46dp" android:text="← VOLVER A LA POKÉDEX"
+            android:textColor="#FFFFFF" android:textStyle="bold" android:backgroundTint="#252631"/>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="COMPARADOR DE TIPOS" android:textColor="#FFFFFF" android:textSize="24sp"
+            android:textStyle="bold" android:gravity="center" android:layout_marginTop="28dp"/>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Descubre qué tan efectivo es un tipo contra otro."
+            android:textColor="#A0A1AD" android:textSize="13sp" android:gravity="center"
+            android:layout_marginTop="7dp" android:layout_marginBottom="25dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp" android:background="@drawable/bg_pokemon_card">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="TIPO ATACANTE" android:textColor="#43E0A0"
+                android:textStyle="bold" android:textSize="11sp"/>
+            <Spinner android:id="@+id/spnAtaque" android:layout_width="match_parent"
+                android:layout_height="54dp" android:layout_marginTop="5dp"
+                android:backgroundTint="#43E0A0"/>
+            <View android:layout_width="match_parent" android:layout_height="1dp"
+                android:background="#343849" android:layout_marginTop="8dp" android:layout_marginBottom="16dp"/>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="TIPO DEFENSOR" android:textColor="#43E0A0"
+                android:textStyle="bold" android:textSize="11sp"/>
+            <Spinner android:id="@+id/spnDefensa" android:layout_width="match_parent"
+                android:layout_height="54dp" android:layout_marginTop="5dp"
+                android:backgroundTint="#43E0A0"/>
+        </LinearLayout>
+        <Button android:id="@+id/btnCalcular" android:layout_width="match_parent"
+            android:layout_height="54dp" android:text="CALCULAR EFECTIVIDAD"
+            android:textColor="#FFFFFF" android:textStyle="bold"
+            android:backgroundTint="#E9273D" android:layout_marginTop="20dp"/>
+        <TextView android:id="@+id/txtResultado" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Selecciona los tipos y pulsa calcular."
+            android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold"
+            android:gravity="center" android:padding="24dp" android:layout_marginTop="16dp"
+            android:background="@drawable/bg_pokemon_card"/>
+    </LinearLayout>
+</ScrollView>

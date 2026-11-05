@@ -14,6 +14,14 @@
         android:theme="@style/Theme.Pokedex">
 
         <activity
+            android:name=".TeamActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".TypeMatchupActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".DetailActivity"
             android:exported="false" />
 
