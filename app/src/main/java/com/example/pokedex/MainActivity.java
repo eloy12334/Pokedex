@@ -100,11 +100,11 @@ public class MainActivity extends AppCompatActivity {
 
     // ORDEN DE TIPOS
 
+    // Los 18 tipos oficiales, en el mismo orden usado por los filtros.
     private final String[] ordenTipos = {
-            "normal", "fire", "water", "grass",
-            "electric", "ice", "fighting", "poison",
-            "ground", "flying", "psychic", "bug",
-            "rock", "ghost", "dragon", "fairy"
+            "normal", "fire", "water", "grass", "electric", "ice",
+            "fighting", "poison", "ground", "flying", "psychic", "bug",
+            "rock", "ghost", "dragon", "dark", "steel", "fairy"
     };
 
     @Override
@@ -521,12 +521,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void cargarTiposPokemon() {
 
-        String[] tipos = {
-                "fire", "water", "grass", "electric",
-                "psychic", "ice", "dragon", "ghost",
-                "bug", "poison", "ground", "flying",
-                "fighting", "rock", "normal", "fairy"
-        };
+        // Cargar los 18 tipos, incluidos Siniestro y Acero.
+        String[] tipos = ordenTipos.clone();
 
         for (String tipo : tipos) {
 
@@ -636,62 +632,149 @@ public class MainActivity extends AppCompatActivity {
 
     private void mostrarMenuTipos(View vista) {
 
-        PopupMenu menu = new PopupMenu(this, vista);
-
-        String[] nombres = {
+        final String[] nombres = {
                 "Normal", "Fuego", "Agua", "Planta",
                 "Eléctrico", "Hielo", "Lucha", "Veneno",
                 "Tierra", "Volador", "Psíquico", "Bicho",
-                "Roca", "Fantasma", "Dragón", "Hada"
+                "Roca", "Fantasma", "Dragón", "Siniestro",
+                "Acero", "Hada"
         };
 
-        String[] tiposApi = {
+        final String[] tiposApi = {
                 "normal", "fire", "water", "grass",
                 "electric", "ice", "fighting", "poison",
                 "ground", "flying", "psychic", "bug",
-                "rock", "ghost", "dragon", "fairy"
+                "rock", "ghost", "dragon", "dark",
+                "steel", "fairy"
         };
 
-        for (int i = 0; i < nombres.length; i++) {
+        final String[] simbolos = {
+                "◉", "🔥", "💧", "🌿", "⚡", "❄", "✊", "☠",
+                "⛰", "🪽", "🔮", "🐛", "🪨", "👻", "🐉", "🌑",
+                "⚙", "✨"
+        };
 
-            menu.getMenu().add(
-                    i,
-                    i,
-                    i,
-                    nombres[i]
-            );
+        final int[] colores = {
+                0xFFA8A878, 0xFFF08030, 0xFF6890F0, 0xFF78C850,
+                0xFFF8D030, 0xFF98D8D8, 0xFFC03028, 0xFFA040A0,
+                0xFFE0C068, 0xFFA890F0, 0xFFF85888, 0xFFA8B820,
+                0xFFB8A038, 0xFF705898, 0xFF7038F8, 0xFF705848,
+                0xFFB8B8D0, 0xFFEE99AC
+        };
+
+        android.app.Dialog dialog = new android.app.Dialog(this);
+        android.widget.LinearLayout contenedor =
+                new android.widget.LinearLayout(this);
+        contenedor.setOrientation(android.widget.LinearLayout.VERTICAL);
+        contenedor.setPadding(18, 16, 18, 12);
+        contenedor.setBackgroundColor(0xFF171923);
+
+        TextView titulo = new TextView(this);
+        titulo.setText("FILTRAR POR TIPO");
+        titulo.setTextColor(0xFF43E0A0);
+        titulo.setTextSize(13);
+        titulo.setTypeface(null, android.graphics.Typeface.BOLD);
+        titulo.setPadding(8, 8, 8, 16);
+        contenedor.addView(titulo);
+
+        android.widget.ScrollView scroll = new android.widget.ScrollView(this);
+        android.widget.LinearLayout lista =
+                new android.widget.LinearLayout(this);
+        lista.setOrientation(android.widget.LinearLayout.VERTICAL);
+
+        for (int i = 0; i < nombres.length; i++) {
+            final int posicion = i;
+
+            android.widget.LinearLayout fila =
+                    new android.widget.LinearLayout(this);
+            fila.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+            fila.setGravity(android.view.Gravity.CENTER_VERTICAL);
+            fila.setPadding(12, 11, 12, 11);
+            fila.setBackground(makeTypeMenuBackground());
+
+            TextView simbolo = new TextView(this);
+            simbolo.setText(simbolos[i]);
+            simbolo.setTextSize(19);
+            simbolo.setTextColor(colores[i]);
+            simbolo.setGravity(android.view.Gravity.CENTER);
+            simbolo.setWidth(42);
+            fila.addView(simbolo);
+
+            TextView nombre = new TextView(this);
+            nombre.setText(nombres[i]);
+            nombre.setTextColor(0xFFF5F5F7);
+            nombre.setTextSize(15);
+            nombre.setTypeface(null, android.graphics.Typeface.BOLD);
+            fila.addView(nombre, new android.widget.LinearLayout.LayoutParams(
+                    0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+
+            android.view.View indicador = new android.view.View(this);
+            android.graphics.drawable.GradientDrawable punto =
+                    new android.graphics.drawable.GradientDrawable();
+            punto.setShape(android.graphics.drawable.GradientDrawable.OVAL);
+            punto.setColor(colores[i]);
+            indicador.setBackground(punto);
+            android.widget.LinearLayout.LayoutParams puntoParams =
+                    new android.widget.LinearLayout.LayoutParams(9, 9);
+            fila.addView(indicador, puntoParams);
+
+            fila.setOnClickListener(v -> {
+                dialog.dismiss();
+                cargarFiltroTipo(tiposApi[posicion]);
+                btnPorTipo.setText("Tipo: " + nombres[posicion]);
+            });
+
+            android.widget.LinearLayout.LayoutParams filaParams =
+                    new android.widget.LinearLayout.LayoutParams(
+                            android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+            filaParams.bottomMargin = 5;
+            lista.addView(fila, filaParams);
         }
 
-        menu.getMenu().add(
-                100,
-                100,
-                100,
-                "Quitar filtro"
-        );
-
-        menu.setOnMenuItemClickListener(item -> {
-
-            if (item.getItemId() == 100) {
-
-                idsTipoSeleccionado = null;
-
-                actualizarColorFiltros();
-
-                filtrarPokemon(
-                        edtBuscarPokemon.getText().toString()
-                );
-
-                return true;
-            }
-
-            cargarFiltroTipo(
-                    tiposApi[item.getItemId()]
-            );
-
-            return true;
+        TextView quitar = new TextView(this);
+        quitar.setText("✕   Quitar filtro");
+        quitar.setTextColor(0xFFFF6474);
+        quitar.setTextSize(14);
+        quitar.setTypeface(null, android.graphics.Typeface.BOLD);
+        quitar.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        quitar.setPadding(16, 16, 16, 16);
+        quitar.setOnClickListener(v -> {
+            dialog.dismiss();
+            idsTipoSeleccionado = null;
+            btnPorTipo.setText("Por tipo");
+            actualizarColorFiltros();
+            filtrarPokemon(edtBuscarPokemon.getText().toString());
         });
 
-        menu.show();
+        scroll.addView(lista);
+        contenedor.addView(scroll, new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0, 1));
+        contenedor.addView(quitar);
+
+        dialog.setContentView(contenedor);
+        android.view.Window window = dialog.getWindow();
+        if (window != null) {
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+            window.setLayout(
+                    (int) (getResources().getDisplayMetrics().widthPixels * 0.82),
+                    (int) (getResources().getDisplayMetrics().heightPixels * 0.72));
+        }
+        dialog.show();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().setLayout(
+                    (int) (getResources().getDisplayMetrics().widthPixels * 0.82),
+                    (int) (getResources().getDisplayMetrics().heightPixels * 0.72));
+        }
+    }
+
+    private android.graphics.drawable.Drawable makeTypeMenuBackground() {
+        android.graphics.drawable.GradientDrawable fondo =
+                new android.graphics.drawable.GradientDrawable();
+        fondo.setColor(0xFF222531);
+        fondo.setCornerRadius(14 * getResources().getDisplayMetrics().density);
+        return fondo;
     }
 
     // FILTRAR POR TIPO

@@ -1,12 +1,15 @@
 package com.example.pokedex;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
-import android.view.ViewGroup;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -15,9 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.pokedex.api.ApiClient;
 import com.example.pokedex.model.PokemonTypeResponse;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,8 +26,7 @@ import retrofit2.Response;
 
 public class TypeMatchupActivity extends AppCompatActivity {
 
-    private Spinner spnAtaque;
-    private Spinner spnDefensa;
+    private Spinner spnAtaque, spnDefensa;
     private TextView txtResultado;
     private Button btnCalcular;
 
@@ -42,6 +42,19 @@ public class TypeMatchupActivity extends AppCompatActivity {
             "Bicho", "Roca", "Fantasma", "Dragón", "Siniestro", "Acero", "Hada"
     };
 
+    private final String[] simbolos = {
+            "◯", "🔥", "💧", "⚡", "🍃", "❄", "✊", "☠",
+            "⛰", "🪽", "🔮", "🐛", "🪨", "👻", "🐉", "🌑", "⚙", "✨"
+    };
+
+    private final int[] colores = {
+            0xFFA8A878, 0xFFF08030, 0xFF6890F0, 0xFFF8D030,
+            0xFF78C850, 0xFF98D8D8, 0xFFC03028, 0xFFA040A0,
+            0xFFE0C068, 0xFFA890F0, 0xFFF85888, 0xFFA8B820,
+            0xFFB8A038, 0xFF705898, 0xFF7038F8, 0xFF705848,
+            0xFFB8B8D0, 0xFFEE99AC
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,32 +68,61 @@ public class TypeMatchupActivity extends AppCompatActivity {
         Button btnVolver = findViewById(R.id.btnVolverTipos);
         btnVolver.setOnClickListener(v -> finish());
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item, tiposEspanol) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                TextView view = (TextView) super.getView(position, convertView, parent);
-                view.setTextColor(Color.WHITE);
-                view.setTextSize(16);
-                view.setPadding(12, 0, 12, 0);
-                return view;
-            }
-
-            @Override
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                TextView view = (TextView) super.getDropDownView(position, convertView, parent);
-                view.setTextColor(Color.WHITE);
-                view.setTextSize(15);
-                view.setPadding(18, 14, 18, 14);
-                view.setBackgroundColor(0xFF202330);
-                return view;
-            }
-        };
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        TypeSpinnerAdapter adapter = new TypeSpinnerAdapter();
         spnAtaque.setAdapter(adapter);
-        spnDefensa.setAdapter(adapter);
+        spnDefensa.setAdapter(new TypeSpinnerAdapter());
 
         btnCalcular.setOnClickListener(v -> calcularEfectividad());
+    }
+
+    private class TypeSpinnerAdapter extends ArrayAdapter<String> {
+        TypeSpinnerAdapter() {
+            super(TypeMatchupActivity.this, android.R.layout.simple_spinner_item, tiposEspanol);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return crearFila(position, false);
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return crearFila(position, true);
+        }
+
+        private View crearFila(int position, boolean desplegable) {
+            LinearLayout fila = new LinearLayout(TypeMatchupActivity.this);
+            fila.setOrientation(LinearLayout.HORIZONTAL);
+            fila.setGravity(Gravity.CENTER_VERTICAL);
+            fila.setPadding(12, desplegable ? 12 : 5, 12, desplegable ? 12 : 5);
+            fila.setBackgroundColor(desplegable ? 0xFF20222E : Color.TRANSPARENT);
+
+            TextView icono = new TextView(TypeMatchupActivity.this);
+            icono.setText(simbolos[position]);
+            icono.setTextSize(17);
+            icono.setGravity(Gravity.CENTER);
+            GradientDrawable circulo = new GradientDrawable();
+            circulo.setShape(GradientDrawable.OVAL);
+            circulo.setColor(colores[position]);
+            icono.setBackground(circulo);
+            icono.setWidth(dp(34));
+            icono.setHeight(dp(34));
+
+            TextView nombre = new TextView(TypeMatchupActivity.this);
+            nombre.setText(tiposEspanol[position]);
+            nombre.setTextColor(Color.WHITE);
+            nombre.setTextSize(14);
+            nombre.setTypeface(null, Typeface.BOLD);
+            nombre.setPadding(dp(12), 0, 0, 0);
+
+            fila.addView(icono);
+            fila.addView(nombre);
+            return fila;
+        }
+    }
+
+    private int dp(int valor) {
+        return (int) (valor * getResources().getDisplayMetrics().density + 0.5f);
     }
 
     private void calcularEfectividad() {
@@ -105,35 +147,26 @@ public class TypeMatchupActivity extends AppCompatActivity {
                             return;
                         }
 
-                        PokemonTypeResponse.DamageRelations dr =
-                                response.body().getDamageRelations();
-
+                        PokemonTypeResponse.DamageRelations dr = response.body().getDamageRelations();
                         double multiplicador = 1.0;
-                        if (contiene(dr.getNoDamageTo(), tipoDefensa)) {
-                            multiplicador = 0.0;
-                        } else if (contiene(dr.getDoubleDamageTo(), tipoDefensa)) {
-                            multiplicador = 2.0;
-                        } else if (contiene(dr.getHalfDamageTo(), tipoDefensa)) {
-                            multiplicador = 0.5;
-                        }
+                        if (contiene(dr.getNoDamageTo(), tipoDefensa)) multiplicador = 0.0;
+                        else if (contiene(dr.getDoubleDamageTo(), tipoDefensa)) multiplicador = 2.0;
+                        else if (contiene(dr.getHalfDamageTo(), tipoDefensa)) multiplicador = 0.5;
 
-                        String valor;
-                        if (multiplicador == 0.0) valor = "0×";
-                        else if (multiplicador == 0.5) valor = "0,5×";
-                        else if (multiplicador == 2.0) valor = "2×";
-                        else valor = "1×";
+                        String valor = multiplicador == 0.0 ? "0×"
+                                : multiplicador == 0.5 ? "0,5×"
+                                : multiplicador == 2.0 ? "2×" : "1×";
 
-                        String conclusion;
-                        if (multiplicador == 0.0) conclusion = "No causa daño.";
-                        else if (multiplicador > 1.0) conclusion = "Es un ataque supereficaz.";
-                        else if (multiplicador < 1.0) conclusion = "Es un ataque poco eficaz.";
-                        else conclusion = "Daño normal.";
+                        String conclusion = multiplicador == 0.0 ? "No causa daño."
+                                : multiplicador > 1.0 ? "Es un ataque supereficaz."
+                                : multiplicador < 1.0 ? "Es un ataque poco eficaz."
+                                : "Daño normal.";
 
-                        txtResultado.setText(
-                                tiposEspanol[posicionAtaque] + " contra "
+                        txtResultado.setText(simbolos[posicionAtaque] + " "
+                                + tiposEspanol[posicionAtaque] + " contra "
+                                + simbolos[posicionDefensa] + " "
                                 + tiposEspanol[posicionDefensa] + "\n\n"
-                                + valor + "\n" + conclusion
-                        );
+                                + valor + "\n" + conclusion);
                     }
 
                     @Override
